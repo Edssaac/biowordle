@@ -56,7 +56,7 @@ const drawnBoard = () => {
     var positions = '';
 
     for (let row = 1; row <= MAX_ATTEMPTS; row++) {
-        positions += `<div class="row row-${row}">`;
+        positions += `<div class="k-row k-row-${row}">`;
 
         for (let column = 1; column <= MAX_LETTER_PER_ROW; column++) {
             positions += `<div class="letter letter-${column}"></div>`;
@@ -71,6 +71,8 @@ const drawnBoard = () => {
 const getOneRandomWord = (wordsList) => {
     const countWords = wordsList.length;
     const shuffleIndex = Math.floor(Math.random() * countWords);
+    
+    document.getElementById("hint-text").innerText = wordsList[shuffleIndex].meaning;
 
     return wordsList[shuffleIndex].word.toLowerCase();
 }
@@ -98,20 +100,20 @@ const resetInitialGame = (game) => {
 }
 
 const resetBoardGameLetter = () => {
-    document.querySelectorAll('.board-game .row .letter').forEach((element) => {
+    document.querySelectorAll('.board-game .k-row .letter').forEach((element) => {
         element.textContent = '';
         element.style.background = '';
     })
 }
 
 const resetKeyboardLetter = () => {
-    document.querySelectorAll('.keyboard .row .letter').forEach((element) => {
+    document.querySelectorAll('.keyboard .k-row .letter').forEach((element) => {
         element.style.background = '';
     })
 }
 
 const getGameBoardLetter = (currentRow, currentLetterPosition) => {
-    return document.querySelector(`.board-game .row-${currentRow} .letter-${currentLetterPosition}`);
+    return document.querySelector(`.board-game .k-row-${currentRow} .letter-${currentLetterPosition}`);
 }
 
 const isBackspaceKeyPressed = (pressedKey) => {
@@ -173,7 +175,7 @@ const applyColor = (element, color) => {
 
 const displayColor = (game) => {
     const { currentGuess, currentRow, rightGuess } = game;
-    const row = document.querySelector(`.row-${currentRow}`);
+    const row = document.querySelector(`.k-row-${currentRow}`);
 
     for (let position = 0; position < currentGuess.length; position++) {
         const box = row.querySelector(`.letter-${position + 1}`);
