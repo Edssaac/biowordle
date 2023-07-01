@@ -46,8 +46,8 @@ const toastifyDefaultConfig = {
         boxShadow: "1px 3px 10px 0px #585858"
     },
     offset: {
-        x: 0, 
-        y: 75 
+        x: 0,
+        y: 75
     }
 }
 
@@ -71,7 +71,7 @@ const drawnBoard = () => {
 const getOneRandomWord = (wordsList) => {
     const countWords = wordsList.length;
     const shuffleIndex = Math.floor(Math.random() * countWords);
-    
+
     document.getElementById("hint-text").innerText = wordsList[shuffleIndex].meaning;
 
     return wordsList[shuffleIndex].word.toLowerCase();
@@ -100,6 +100,8 @@ const resetInitialGame = (game) => {
 }
 
 const resetBoardGameLetter = () => {
+    document.querySelector('.collapse').classList.remove('show');
+
     document.querySelectorAll('.board-game .k-row .letter').forEach((element) => {
         element.textContent = '';
         element.style.background = '';
@@ -151,14 +153,14 @@ const isGuessInDictionary = (guess) => {
 
     if (request.status === 200) {
         var response = JSON.parse(request.responseText);
-        console.log(response)
+
         if (response.hasOwnProperty('0') && response[0].hasOwnProperty('word_id')) {
             return true;
         }
 
         return false;
     } else {
-      return false;
+        return false;
     }
 }
 
@@ -217,6 +219,17 @@ const displayColor = (game) => {
     }
 }
 
+const displayAnimation = (game, animation, timeout) => {
+    const { currentRow } = game;
+    const row = document.querySelector(`.k-row-${currentRow}`);
+
+    row.classList.add(animation);
+
+    setTimeout(() => {
+        row.classList.remove(animation);
+    }, timeout);
+}
+
 const removeLastLetter = (currentGuess) => {
     return currentGuess.slice(0, currentGuess.length - 1)
 }
@@ -262,14 +275,17 @@ const checkGuess = (game) => {
     const { database, currentLetterPosition, currentGuess, rightGuess } = game;
 
     if (isCurrentGuessEmpty(currentGuess)) {
+        displayAnimation(game, 'invalid-guess', 600);
         return showNotification({ message: NOTIFICATION_EMPTY_GUESS, background: TOASTIFY_ERROR_COLOR });
     }
 
     if (!reachMaxLetterPerRow(currentLetterPosition)) {
+        displayAnimation(game, 'invalid-guess', 600);
         return showNotification({ message: NOTIFICATION_INCOMPLETE_GUESS, background: TOASTIFY_WARNING_COLOR });
     }
 
     if (!isGuessInDatabase(currentGuess, database) && !isGuessInDictionary(currentGuess)) {
+        displayAnimation(game, 'invalid-guess', 600);
         return showNotification({ message: NOTIFICATION_WORD_NOT_IN_DATABASE, background: TOASTIFY_WARNING_COLOR });
     }
 
@@ -370,13 +386,14 @@ const loadWords = async () => {
 const start = () => {
     window.onload = async () => {
         drawnBoard();
+        document.querySelector('.collapse').classList.remove('show');
 
         const database = await loadWords();
         const rightGuess = getOneRandomWord(database);
 
         const game = { ...gameInitialConfig, database, rightGuess }
 
-        console.log(database)
+        // console.log(database)
         console.log('get one random word: ', rightGuess);
 
         onKeydown(game);
