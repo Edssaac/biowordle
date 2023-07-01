@@ -144,6 +144,24 @@ const isGuessInDatabase = (guess, database) => {
     return false;
 }
 
+const isGuessInDictionary = (guess) => {
+    var request = new XMLHttpRequest();
+    request.open('GET', `https://api.dicionario-aberto.net/word/${guess}`, false); // Defina o terceiro parâmetro como false para requisição síncrona
+    request.send();
+
+    if (request.status === 200) {
+        var response = JSON.parse(request.responseText);
+        console.log(response)
+        if (response.hasOwnProperty('0') && response[0].hasOwnProperty('word_id')) {
+            return true;
+        }
+
+        return false;
+    } else {
+      return false;
+    }
+}
+
 const isCurrentGuessEmpty = (currentGuess) => {
     return currentGuess === '';
 }
@@ -251,7 +269,7 @@ const checkGuess = (game) => {
         return showNotification({ message: NOTIFICATION_INCOMPLETE_GUESS, background: TOASTIFY_WARNING_COLOR });
     }
 
-    if (!isGuessInDatabase(currentGuess, database)) {
+    if (!isGuessInDatabase(currentGuess, database) && !isGuessInDictionary(currentGuess)) {
         return showNotification({ message: NOTIFICATION_WORD_NOT_IN_DATABASE, background: TOASTIFY_WARNING_COLOR });
     }
 
