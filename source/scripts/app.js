@@ -68,13 +68,46 @@ const drawnBoard = () => {
     board.innerHTML = positions;
 }
 
-const getOneRandomWord = (wordsList) => {
+const startLocalStorage = (wordsList) => {
     const countWords = wordsList.length;
+
+    const gameHistory = {
+        wordsList: new Array(countWords),
+        countWords: countWords
+    }
+
+    for (let i = 0; i < countWords; i++) {
+        gameHistory.wordsList[i] = i;
+    }
+
+    localStorage.setItem('game_history', JSON.stringify(gameHistory));
+}
+
+const getOneRandomWord = (wordsList) => {
+    var countWords = wordsList.length;
+
+    if (!localStorage.hasOwnProperty('game_history')) {
+        startLocalStorage(wordsList);
+    }
+
+    var gameHistory = JSON.parse(localStorage.getItem('game_history'));
+
+    if (gameHistory.countWords != countWords || gameHistory.wordsList.length == 0) {
+        startLocalStorage(wordsList);
+
+        var gameHistory = JSON.parse(localStorage.getItem('game_history'));
+    }
+
+    var countWords = gameHistory.wordsList.length;
+
     const shuffleIndex = Math.floor(Math.random() * countWords);
+    const shuffleValue = gameHistory.wordsList.splice(shuffleIndex, 1);
 
-    document.getElementById("hint-text").innerText = wordsList[shuffleIndex].meaning;
+    localStorage.setItem('game_history', JSON.stringify(gameHistory));
 
-    return wordsList[shuffleIndex].word.toLowerCase();
+    document.getElementById("hint-text").innerText = wordsList[shuffleValue].meaning;
+    
+    return wordsList[shuffleValue].word.toLowerCase();
 }
 
 const showNotification = ({ background, message }) => {
