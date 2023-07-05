@@ -51,6 +51,9 @@ const toastifyDefaultConfig = {
     }
 }
 
+const playAgainModal = new bootstrap.Modal('#playAgainModal', {
+});
+
 const drawnBoard = () => {
     const board = document.querySelector('.board-game');
     var positions = '';
@@ -112,16 +115,6 @@ const getOneRandomWord = (wordsList) => {
 
 const showNotification = ({ background, message }) => {
     Toastify({ ...toastifyDefaultConfig, text: message, background }).showToast();
-}
-
-const showPlayAgainButton = () => {
-    const buttonPlayAgain = document.querySelector('.play-again .btn-play-again');
-    buttonPlayAgain.style.display = 'block';
-}
-
-const hidePlayAgainButton = () => {
-    const buttonPlayAgain = document.querySelector('.btn-play-again');
-    buttonPlayAgain.style.display = 'none';
 }
 
 const resetInitialGame = (game) => {
@@ -298,7 +291,6 @@ const nextGuess = (game) => {
 
     if (reachMaxAttempts(game.currentRow)) {
         showNotification({ message: NOTIFICATION_REACH_MAX_ATTEMPTS, background: TOASTIFY_ERROR_COLOR });
-        showPlayAgainButton();
     }
 
     return NOTIFICATION_ENTER_KEY_PRESSED;
@@ -326,7 +318,7 @@ const checkGuess = (game) => {
         game.active = false;
         displayColor(game);
         displayAnimation(game, 'valid-guess', 450);
-        showPlayAgainButton();
+        playAgainModal.show();
         return showNotification({ message: NOTIFICATION_GAME_OVER_GUESS_RIGHT, background: TOASTIFY_SUCCESS_COLOR });
     }
 
@@ -403,8 +395,7 @@ const onPlayAgainButtonPressed = (game) => {
         resetInitialGame(game);
         resetBoardGameLetter();
         resetKeyboardLetter();
-        hidePlayAgainButton();
-    })
+    });
 }
 
 const onKeydown = (game) => {

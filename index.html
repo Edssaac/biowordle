@@ -32,7 +32,7 @@
                 <i class="far fa-question-circle"></i>
             </button>
             <div class="collapse mt-3" id="collapseHint">
-                <div class="card card-body text-dark" id="hint-text">
+                <div class="card card-body" id="hint-text">
                 </div>
             </div>
         </section>
@@ -83,9 +83,94 @@
             </div>
         </section>
 
-        <section class="play-again">
-            <button type="button" class="btn-play-again">JOGAR NOVAMENTE</button>
-        </section>
+        <div class="modal fade" id="playAgainModal" tabindex="-1" aria-labelledby="playAgainModalLabel" data-bs-backdrop="false" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="playAgainModalLabel">Estatísticas</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-primary">
+                                Partidas <span class="badge text-bg-secondary">10</span>
+                            </button>
+                            <button type="button" class="btn btn-primary">
+                                Vitórias <span class="badge text-bg-secondary">7</span>
+                            </button>
+                        </div>
+                        <p>Distribuição de palpites</p>
+
+                        <div class="row align-items-center">
+                            <div class="col-1">
+                                <span>1</span>
+                            </div>
+                            <div class="col-11">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 5%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">9</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-1">
+                                <span>2</span>
+                            </div>
+                            <div class="col-11">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">11</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-1">
+                                <span>3</span>
+                            </div>
+                            <div class="col-11">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">11</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-1">
+                                <span>4</span>
+                            </div>
+                            <div class="col-11">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">11</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-1">
+                                <span>5</span>
+                            </div>
+                            <div class="col-11">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="85">11</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-1">
+                                <span>6</span>
+                            </div>
+                            <div class="col-11">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">11</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" data-bs-dismiss="modal" class="btn btn-warning btn-play-again">JOGAR NOVAMENTE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
     <script src="./source/scripts/app.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
