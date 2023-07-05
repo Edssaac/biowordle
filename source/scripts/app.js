@@ -308,28 +308,30 @@ const checkGuess = (game) => {
     const { database, currentLetterPosition, currentGuess, rightGuess } = game;
 
     if (isCurrentGuessEmpty(currentGuess)) {
-        displayAnimation(game, 'invalid-guess', 600);
+        displayAnimation(game, 'invalid-guess', 650);
         return showNotification({ message: NOTIFICATION_EMPTY_GUESS, background: TOASTIFY_ERROR_COLOR });
     }
 
     if (!reachMaxLetterPerRow(currentLetterPosition)) {
-        displayAnimation(game, 'invalid-guess', 600);
+        displayAnimation(game, 'invalid-guess', 650);
         return showNotification({ message: NOTIFICATION_INCOMPLETE_GUESS, background: TOASTIFY_WARNING_COLOR });
     }
 
     if (!isGuessInDatabase(currentGuess, database) && !isGuessInDictionary(currentGuess)) {
-        displayAnimation(game, 'invalid-guess', 600);
+        displayAnimation(game, 'invalid-guess', 650);
         return showNotification({ message: NOTIFICATION_WORD_NOT_IN_DATABASE, background: TOASTIFY_WARNING_COLOR });
     }
 
     if (isCorrectGuess(currentGuess, rightGuess)) {
         game.active = false;
         displayColor(game);
+        displayAnimation(game, 'valid-guess', 450);
         showPlayAgainButton();
         return showNotification({ message: NOTIFICATION_GAME_OVER_GUESS_RIGHT, background: TOASTIFY_SUCCESS_COLOR });
     }
 
     displayColor(game);
+    displayAnimation(game, 'valid-guess', 450);
 
     return nextGuess(game);
 }
