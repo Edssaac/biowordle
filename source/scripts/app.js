@@ -335,10 +335,6 @@ const displayStatsModal = (game) => {
         let points = gameStats.guesses[i - 1];
         let percentage = (points / gameStats.wins) * 100;
 
-        if (percentage < 7) {
-            percentage = 7;
-        }
-
         guesses += `
         <div class="row align-items-center">
             <div class="col-1">
