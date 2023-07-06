@@ -71,7 +71,7 @@ const drawnBoard = () => {
     board.innerHTML = positions;
 }
 
-const startLocalStorage = (wordsList) => {
+const startGameHistory = (wordsList) => {
     const countWords = wordsList.length;
 
     const gameHistory = {
@@ -90,13 +90,13 @@ const getOneRandomWord = (wordsList) => {
     var countWords = wordsList.length;
 
     if (!localStorage.hasOwnProperty('game_history')) {
-        startLocalStorage(wordsList);
+        startGameHistory(wordsList);
     }
 
     var gameHistory = JSON.parse(localStorage.getItem('game_history'));
 
     if (gameHistory.countWords != countWords || gameHistory.wordsList.length == 0) {
-        startLocalStorage(wordsList);
+        startGameHistory(wordsList);
 
         var gameHistory = JSON.parse(localStorage.getItem('game_history'));
     }
@@ -109,7 +109,7 @@ const getOneRandomWord = (wordsList) => {
     localStorage.setItem('game_history', JSON.stringify(gameHistory));
 
     document.getElementById("hint-text").innerText = wordsList[shuffleValue].meaning;
-    
+
     return wordsList[shuffleValue].word.toLowerCase();
 }
 
@@ -291,9 +291,76 @@ const nextGuess = (game) => {
 
     if (reachMaxAttempts(game.currentRow)) {
         showNotification({ message: NOTIFICATION_REACH_MAX_ATTEMPTS, background: TOASTIFY_ERROR_COLOR });
+        displayStatsModal(game);
     }
 
     return NOTIFICATION_ENTER_KEY_PRESSED;
+}
+
+const startGameStats = () => {
+    const gameStats = {
+        games: 0,
+        wins: 0,
+        defeats: 0,
+        guesses: Array(MAX_ATTEMPTS).fill(0)
+    }
+
+    localStorage.setItem('game_stats', JSON.stringify(gameStats));
+}
+
+const displayStatsModal = (game) => {
+    const statsGames = document.getElementById('stats-games');
+    const statsWins = document.getElementById('stats-wins');
+    const statsDefeats = document.getElementById('stats-defeats');
+    const statsGuesses = document.getElementById('stats-guesses');
+
+    if (!localStorage.hasOwnProperty('game_stats')) {
+        startGameStats();
+    }
+
+    var gameStats = JSON.parse(localStorage.getItem('game_stats'));
+
+    gameStats.games++;
+
+    if (game.currentRow <= MAX_ATTEMPTS) {
+        gameStats.wins++;
+        gameStats.guesses[game.currentRow - 1]++;
+    } else {
+        gameStats.defeats++;
+    }
+
+    var guesses = '';
+
+    for (let i = 1; i <= MAX_ATTEMPTS; i++) {
+        let points = gameStats.guesses[i - 1];
+        let percentage = (points / gameStats.wins) * 100;
+
+        if (percentage < 7) {
+            percentage = 7;
+        }
+
+        guesses += `
+        <div class="row align-items-center">
+            <div class="col-1">
+                <span>${i}</span>
+            </div>
+            <div class="col-11">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: ${percentage}%" title="${points}">
+                        ${points}
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    }
+
+    localStorage.setItem('game_stats', JSON.stringify(gameStats));
+
+    statsGames.innerText = gameStats.games;
+    statsWins.innerText = gameStats.wins;
+    statsDefeats.innerText = gameStats.defeats;
+    statsGuesses.innerHTML = guesses;
+    playAgainModal.show();
 }
 
 const checkGuess = (game) => {
@@ -318,7 +385,7 @@ const checkGuess = (game) => {
         game.active = false;
         displayColor(game);
         displayAnimation(game, 'valid-guess', 450);
-        playAgainModal.show();
+        displayStatsModal(game);
         return showNotification({ message: NOTIFICATION_GAME_OVER_GUESS_RIGHT, background: TOASTIFY_SUCCESS_COLOR });
     }
 
@@ -419,7 +486,6 @@ const start = () => {
 
         const game = { ...gameInitialConfig, database, rightGuess }
 
-        // console.log(database)
         console.log('get one random word: ', rightGuess);
 
         onKeydown(game);
