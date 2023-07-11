@@ -333,7 +333,7 @@ const displayStatsModal = (game) => {
 
     for (let i = 1; i <= MAX_ATTEMPTS; i++) {
         let points = gameStats.guesses[i - 1];
-        let percentage = (points / gameStats.wins) * 100;
+        let percentage = (points > 0) ? ((points / gameStats.wins) * 100) : 0;
 
         guesses += `
         <div class="row align-items-center">
