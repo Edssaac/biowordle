@@ -180,6 +180,7 @@ main {
 }
 
 @keyframes valid-guess {
+
     0%,
     100% {
         transform: rotateX(0)

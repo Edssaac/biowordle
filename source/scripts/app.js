@@ -482,8 +482,6 @@ const start = () => {
 
         const game = { ...gameInitialConfig, database, rightGuess }
 
-        console.log('get one random word: ', rightGuess);
-
         onKeydown(game);
         onLetterButtonPressed(game);
         onEnterButtonPressed(game);
